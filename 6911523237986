@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huda Rosemary - Tuski Cosmetics</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fce4ec; margin: 0; padding: 0; text-align: center; color: #333; }
+        .header { background: white; padding: 20px; border-bottom: 3px solid #ff80ab; }
+        .logo { max-width: 200px; }
+        .container { padding: 20px; max-width: 500px; margin: auto; background: white; margin-top: 20px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        h1 { color: #d81b60; font-size: 24px; }
+        .barcode { font-size: 14px; color: #888; margin-bottom: 20px; }
+        .section { text-align: left; margin-bottom: 25px; padding: 0 10px; }
+        .lang-title { font-weight: bold; border-left: 4px solid #ff80ab; padding-left: 10px; margin-bottom: 10px; color: #c2185b; }
+        .ingredients { background: #fff8f9; padding: 10px; border-radius: 10px; font-style: italic; font-size: 0.9em; }
+        .footer-btn { display: block; background: #d81b60; color: white; padding: 15px; text-decoration: none; border-radius: 50px; margin-top: 30px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h2 style="margin:0; color:#d81b60;">TUSKI COSMETICS</h2>
+    <p style="margin:0; font-size:12px;">COSMETICS & STYLE</p>
+</div>
+
+<div class="container">
+    <h1>Huda Rosemary Face Cream</h1>
+    <div class="barcode">Barcode: 6911523237986</div>
+
+    <div class="section">
+        <div class="lang-title">AZƏRBAYCAN</div>
+        <p>1980-ci ildən təcrübə. Avokado və manakuya əsaslı üz kremi. Bütün dəri tipləri üçün idealdır.</p>
+    </div>
+
+    <div class="section">
+        <div class="lang-title">ქართული</div>
+        <p>სახის კრემი ავოკადოსა და მანაკუიას ბაზაზე. გამოიყენება ნებისმიერი ტიპის კანისთვის. დაარსებულია 1980 წელს.</p>
+    </div>
+
+    <div class="section">
+        <div class="lang-title">ENGLISH</div>
+        <p class="ingredients"><b>Main components:</b> Avocado base, Passion fruit (Manakuya). Deep hydration for all skin types.</p>
+    </div>
+
+    <a href="https://wa.me/ВАШ_НОМЕР" class="footer-btn">Sifariş et / შეკვეთა (WhatsApp)</a>
+</div>
+
+<div style="padding: 20px; font-size: 10px; color: #aaa;">
+    &copy; 2026 Tuski Cosmetics & Style - Marneuli
+</div>
+
+</body>
+</html>
