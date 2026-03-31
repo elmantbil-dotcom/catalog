@@ -6,60 +6,57 @@
     <title>Tuski Cosmetics - Catalog</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #fff0f5; margin: 0; padding: 0; text-align: center; }
-        .header { background: white; padding: 30px 20px; border-bottom: 4px solid #ff80ab; }
-        .logo-text { font-size: 28px; font-weight: bold; color: #d81b60; letter-spacing: 2px; }
-        .container { padding: 20px; max-width: 600px; margin: auto; }
+        .header { background: white; padding: 25px; border-bottom: 4px solid #ff80ab; }
+        .logo-text { font-size: 26px; font-weight: bold; color: #d81b60; text-transform: uppercase; }
+        .container { padding: 20px; max-width: 500px; margin: auto; }
         
-        .product-card { 
+        .product-link { 
             background: white; 
-            display: flex; 
-            align-items: center; 
-            padding: 15px; 
+            display: block; 
+            padding: 20px; 
             margin-bottom: 15px; 
             border-radius: 15px; 
             text-decoration: none; 
             color: #333; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-left: 10px solid #ff80ab;
+            text-align: left;
             transition: 0.3s;
-            border-left: 8px solid #ff80ab;
         }
-        .product-card:hover { transform: scale(1.02); }
-        .product-info { text-align: left; margin-left: 15px; }
-        .product-title { font-weight: bold; color: #c2185b; font-size: 18px; }
-        .product-desc { font-size: 13px; color: #666; margin-top: 5px; }
+        .product-link:hover { transform: translateX(10px); }
+        .title { font-weight: bold; font-size: 18px; display: block; }
+        .desc { font-size: 13px; color: #777; }
     </style>
 </head>
 <body>
 
 <div class="header">
     <div class="logo-text">TUSKI COSMETICS</div>
-    <p>Cosmetics & Style | Marneuli</p>
+    <div style="font-size: 12px; color: #888;">MARNEULİ - KATALOQ</div>
 </div>
 
 <div class="container">
-    <h3 style="color: #888;">Məhsul Kataloqu / პროდუქციის კატალოგი</h3>
+    <h2 style="color: #c2185b; font-size: 20px;">Məhsul Siyahısı / პროდუქციის სია</h2>
 
-    <a href="6911523237986.html" class="product-card">
-        <div class="product-info">
-            <div class="product-title">Huda Rosemary Face Cream</div>
-            <div class="product-desc">Üz kremi - Avokado və manakuya (Since 1980)</div>
-        </div>
+    <a href="6911523237986.html" class="product-link">
+        <span class="title">Huda Rosemary Face Cream</span>
+        <span class="desc">Üz kremi / სახის კრემი (Avokado)</span>
     </a>
 
-    <a href="4585795648539.html" class="product-card" style="border-left-color: #4caf50;">
-        <div class="product-info">
-            <div class="product-title" style="color: #2e7d32;">Aloe Vera Moisturizing Gel</div>
-            <div class="product-desc">Nəmləndirici gel - Təbii aloe ekstraktı</div>
-        </div>
+    <a href="4585795648539.html" class="product-link" style="border-left-color: #4caf50;">
+        <span class="title" style="color: #2e7d32;">Aloe Vera Moisturizing Gel</span>
+        <span class="desc">Nəmləndirici gel / დამატენიანებელი გელი</span>
     </a>
 
-    <a href="8809576261172.html" class="product-card" style="border-left-color: #2196f3;">
-        <div class="product-info">
-            <div class="product-title" style="color: #1565c0;">Centella Face Serum</div>
-            <div class="product-desc">Koreya keyfiyyəti - Sakitləşdirici zərdab</div>
-        </div>
+    <a href="8809576261172.html" class="product-link" style="border-left-color: #2196f3;">
+        <span class="title" style="color: #1565c0;">Centella Face Serum</span>
+        <span class="desc">Koreya zərdabı / კორეული შრატი</span>
     </a>
 
+</div>
+
+<div style="margin-top: 30px; font-size: 12px; color: #aaa;">
+    © 2026 Tuski Cosmetics & Style
 </div>
 
 </body>
