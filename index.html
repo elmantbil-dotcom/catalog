@@ -3,57 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tuski Cosmetics - Smart Scanner</title>
+    <title>Tuski Cosmetics - Smart Catalog</title>
     <script src="https://unpkg.com/@zxing/library@latest"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #fff0f5; margin: 0; padding: 0; text-align: center; }
         .header { background: white; padding: 20px; border-bottom: 4px solid #ff80ab; }
-        .logo-text { font-size: 24px; font-weight: bold; color: #d81b60; }
+        
+        /* Стили для логотипа */
+        .logo-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #ff80ab; margin-bottom: 10px; }
+        .logo-text { font-size: 24px; font-weight: bold; color: #d81b60; text-transform: uppercase; }
+        
         .container { padding: 20px; max-width: 500px; margin: auto; }
         
-        /* Стили сканера */
+        /* Кнопки контактов */
+        .contact-bar { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
+        .contact-link { text-decoration: none; font-size: 14px; color: white; padding: 8px 15px; border-radius: 20px; font-weight: bold; }
+        .wa { background-color: #25d366; }
+        .ig { background-color: #e1306c; }
+
         #interactive { width: 100%; height: 250px; background: #000; border-radius: 15px; overflow: hidden; display: none; margin-bottom: 20px; }
         video { width: 100%; height: 100%; object-fit: cover; }
         
-        .scan-btn { background: #d81b60; color: white; border: none; padding: 15px 30px; border-radius: 50px; font-weight: bold; font-size: 18px; margin-bottom: 20px; cursor: pointer; width: 100%; }
+        .scan-btn { background: #d81b60; color: white; border: none; padding: 15px; border-radius: 50px; font-weight: bold; font-size: 18px; margin-bottom: 20px; cursor: pointer; width: 100%; box-shadow: 0 4px 10px rgba(216, 27, 96, 0.3); }
         .product-link { background: white; display: block; padding: 15px; margin-bottom: 10px; border-radius: 12px; text-decoration: none; color: #333; text-align: left; border-left: 8px solid #ff80ab; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .title { font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="header">
+    <img src="logo.jpg" alt="Tuski Logo" class="logo-img" onerror="this.style.display='none'">
     <div class="logo-text">TUSKI COSMETICS</div>
-    <div style="font-size: 12px; color: #888;">MARNEULİ - SMART SCANNER</div>
+    <div style="font-size: 12px; color: #888; margin-bottom: 15px;">MARNEULİ - SMART SCANNER</div>
+
+    <div class="contact-bar">
+        <a href="https://wa.me/995555123456" class="contact-link wa">WhatsApp</a>
+        <a href="https://instagram.com/tuski_cosmetics" class="contact-link ig">Instagram</a>
+    </div>
 </div>
 
 <div class="container">
-    <button class="scan-btn" onclick="startScanner()">📷 SKAN ET / სკანირება</button>
+    <button class="scan-btn" onclick="startScanner()">📷 SCAN & FIND / სკანირება</button>
 
-    <div id="interactive">
-        <video id="video"></video>
-    </div>
+    <div id="interactive"><video id="video"></video></div>
 
     <div id="productList">
-        <p style="color: #888;">Məhsul siyahısı (Список товаров):</p>
-        <a href="6911523237986.html" class="product-link"><span class="title">Huda Rosemary Cream</span></a>
-        <a href="4585795648539.html" class="product-link" style="border-left-color: #4caf50;"><span class="title">Aloe Vera Gel</span></a>
-        <a href="8809576261172.html" class="product-link" style="border-left-color: #2196f3;"><span class="title">Centella Serum</span></a>
+        <a href="6911523237986.html" class="product-link"><b>Huda Rosemary Cream</b></a>
+        <a href="4585795648539.html" class="product-link" style="border-left-color: #4caf50;"><b>Aloe Vera Gel</b></a>
+        <a href="8809576261172.html" class="product-link" style="border-left-color: #2196f3;"><b>Centella Face Serum</b></a>
     </div>
 </div>
 
 <script>
     const codeReader = new ZXing.BrowserMultiFormatReader();
-    
     function startScanner() {
         document.getElementById('interactive').style.display = 'block';
-        
         codeReader.decodeFromVideoDevice(null, 'video', (result, err) => {
-            if (result) {
-                console.log(result.text);
-                // Если код найден, переходим на страницу товара
-                window.location.href = result.text + ".html";
-            }
+            if (result) { window.location.href = result.text + ".html"; }
         });
     }
 </script>
