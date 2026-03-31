@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centella Serum - Tuski Cosmetics</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #e3f2fd; margin: 0; padding: 0; text-align: center; color: #333; }
+        .header { background: white; padding: 20px; border-bottom: 3px solid #2196f3; }
+        .container { padding: 20px; max-width: 500px; margin: auto; background: white; margin-top: 20px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        h1 { color: #1565c0; font-size: 24px; }
+        .barcode { font-size: 14px; color: #888; margin-bottom: 20px; }
+        .section { text-align: left; margin-bottom: 25px; padding: 0 10px; }
+        .lang-title { font-weight: bold; border-left: 4px solid #2196f3; padding-left: 10px; margin-bottom: 10px; color: #0d47a1; }
+        .origin-badge { display: inline-block; background: #e3f2fd; color: #1565c0; padding: 5px 15px; border-radius: 20px; font-size: 12px; margin-bottom: 15px; border: 1px solid #bbdefb; }
+        .footer-btn { display: block; background: #1565c0; color: white; padding: 15px; text-decoration: none; border-radius: 50px; margin-top: 30px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h2 style="margin:0; color:#1565c0;">TUSKI COSMETICS</h2>
+    <p style="margin:0; font-size:12px;">KOREAN QUALITY & STYLE</p>
+</div>
+
+<div class="container">
+    <div class="origin-badge">Made in Korea 🇰🇷</div>
+    <h1>Centella Face Serum</h1>
+    <div class="barcode">Barcode: 8809576261172</div>
+
+    <div class="section">
+        <div class="lang-title">AZƏRBAYCAN</div>
+        <p>Koreya keyfiyyəti! İstənilən hava şəraitində üz dərisi üçün mükəmməl qulluq. Centella ekstraktı dərini sakitləşdirir və yeniləyir.</p>
+    </div>
+
+    <div class="section">
+        <div class="lang-title">ქართული</div>
+        <p>კორეული ხარისხი! იდეალური მოვლა ნებისმიერ ამინდში. ცენტელას შრატი ეფექტურად აღადგენს და ამშვიდებს სახის კანს.</p>
+    </div>
+
+    <div class="section">
+        <div class="lang-title">ENGLISH</div>
+        <p style="background: #f5f5f5; padding: 10px; border-radius: 10px; font-style: italic;"><b>Main components:</b> Centella Asiatica Extract. Soothing & Recovery serum for all seasons.</p>
+    </div>
+
+    <a href="https://wa.me/ВАШ_НОМЕР" class="footer-btn">Sifariş et / შეკვეთა (WhatsApp)</a>
+</div>
+
+<div style="padding: 20px; font-size: 10px; color: #aaa;">
+    &copy; 2026 Tuski Cosmetics & Style - Marneuli
+</div>
+
+</body>
+</html>
