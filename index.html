@@ -3,51 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centella Serum - Tuski Cosmetics</title>
+    <title>Tuski Cosmetics - Catalog</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #e3f2fd; margin: 0; padding: 0; text-align: center; color: #333; }
-        .header { background: white; padding: 20px; border-bottom: 3px solid #2196f3; }
-        .container { padding: 20px; max-width: 500px; margin: auto; background: white; margin-top: 20px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        h1 { color: #1565c0; font-size: 24px; }
-        .barcode { font-size: 14px; color: #888; margin-bottom: 20px; }
-        .section { text-align: left; margin-bottom: 25px; padding: 0 10px; }
-        .lang-title { font-weight: bold; border-left: 4px solid #2196f3; padding-left: 10px; margin-bottom: 10px; color: #0d47a1; }
-        .origin-badge { display: inline-block; background: #e3f2fd; color: #1565c0; padding: 5px 15px; border-radius: 20px; font-size: 12px; margin-bottom: 15px; border: 1px solid #bbdefb; }
-        .footer-btn { display: block; background: #1565c0; color: white; padding: 15px; text-decoration: none; border-radius: 50px; margin-top: 30px; font-weight: bold; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fff0f5; margin: 0; padding: 0; text-align: center; }
+        .header { background: white; padding: 30px 20px; border-bottom: 4px solid #ff80ab; }
+        .logo-text { font-size: 28px; font-weight: bold; color: #d81b60; letter-spacing: 2px; }
+        .container { padding: 20px; max-width: 600px; margin: auto; }
+        
+        .product-card { 
+            background: white; 
+            display: flex; 
+            align-items: center; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            border-radius: 15px; 
+            text-decoration: none; 
+            color: #333; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            border-left: 8px solid #ff80ab;
+        }
+        .product-card:hover { transform: scale(1.02); }
+        .product-info { text-align: left; margin-left: 15px; }
+        .product-title { font-weight: bold; color: #c2185b; font-size: 18px; }
+        .product-desc { font-size: 13px; color: #666; margin-top: 5px; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h2 style="margin:0; color:#1565c0;">TUSKI COSMETICS</h2>
-    <p style="margin:0; font-size:12px;">KOREAN QUALITY & STYLE</p>
+    <div class="logo-text">TUSKI COSMETICS</div>
+    <p>Cosmetics & Style | Marneuli</p>
 </div>
 
 <div class="container">
-    <div class="origin-badge">Made in Korea 🇰🇷</div>
-    <h1>Centella Face Serum</h1>
-    <div class="barcode">Barcode: 8809576261172</div>
+    <h3 style="color: #888;">Məhsul Kataloqu / პროდუქციის კატალოგი</h3>
 
-    <div class="section">
-        <div class="lang-title">AZƏRBAYCAN</div>
-        <p>Koreya keyfiyyəti! İstənilən hava şəraitində üz dərisi üçün mükəmməl qulluq. Centella ekstraktı dərini sakitləşdirir və yeniləyir.</p>
-    </div>
+    <a href="6911523237986.html" class="product-card">
+        <div class="product-info">
+            <div class="product-title">Huda Rosemary Face Cream</div>
+            <div class="product-desc">Üz kremi - Avokado və manakuya (Since 1980)</div>
+        </div>
+    </a>
 
-    <div class="section">
-        <div class="lang-title">ქართული</div>
-        <p>კორეული ხარისხი! იდეალური მოვლა ნებისმიერ ამინდში. ცენტელას შრატი ეფექტურად აღადგენს და ამშვიდებს სახის კანს.</p>
-    </div>
+    <a href="4585795648539.html" class="product-card" style="border-left-color: #4caf50;">
+        <div class="product-info">
+            <div class="product-title" style="color: #2e7d32;">Aloe Vera Moisturizing Gel</div>
+            <div class="product-desc">Nəmləndirici gel - Təbii aloe ekstraktı</div>
+        </div>
+    </a>
 
-    <div class="section">
-        <div class="lang-title">ENGLISH</div>
-        <p style="background: #f5f5f5; padding: 10px; border-radius: 10px; font-style: italic;"><b>Main components:</b> Centella Asiatica Extract. Soothing & Recovery serum for all seasons.</p>
-    </div>
+    <a href="8809576261172.html" class="product-card" style="border-left-color: #2196f3;">
+        <div class="product-info">
+            <div class="product-title" style="color: #1565c0;">Centella Face Serum</div>
+            <div class="product-desc">Koreya keyfiyyəti - Sakitləşdirici zərdab</div>
+        </div>
+    </a>
 
-    <a href="https://wa.me/ВАШ_НОМЕР" class="footer-btn">Sifariş et / შეკვეთა (WhatsApp)</a>
-</div>
-
-<div style="padding: 20px; font-size: 10px; color: #aaa;">
-    &copy; 2026 Tuski Cosmetics & Style - Marneuli
 </div>
 
 </body>
