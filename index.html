@@ -3,112 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TUSKI COSMETICS - Каталог</title>
+    <title>TUSKI COSMETICS - Smart Scanner</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        /* Основные стили страницы */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            text-align: center;
-        }
+        body { font-family: sans-serif; margin: 0; padding: 0; background: #f9f9f9; text-align: center; }
+        .header { background: #fff; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .logo-img { max-width: 80px; }
+        .logo-text { font-size: 22px; font-weight: bold; letter-spacing: 1px; }
 
-        /* Шапка сайта */
-        .header {
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .logo-img {
-            max-width: 100px;
-            margin-bottom: 10px;
-        }
-
-        .logo-text {
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            color: #333;
+        /* Стиль для окна сканера */
+        #reader {
+            width: 300px;
+            margin: 20px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid #000;
         }
 
         /* Кнопки категорий */
-        .category-menu {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 25px 0;
-        }
-
-        .filter-btn {
-            padding: 8px 18px;
-            border-radius: 20px;
-            border: 1px solid #ddd;
-            background: #fff;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .filter-btn.active {
-            background: #000;
-            color: #fff;
-            border-color: #000;
-        }
+        .category-menu { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 15px 0; }
+        .filter-btn { padding: 8px 15px; border-radius: 20px; border: 1px solid #ddd; background: #fff; cursor: pointer; }
+        .filter-btn.active { background: #000; color: #fff; }
 
         /* Сетка товаров */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .product-card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .product-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 8px;
-            background-color: #eee;
-        }
-
-        .product-name {
-            font-weight: bold;
-            margin: 10px 0 5px;
-        }
-
-        .product-price {
-            color: #e91e63;
-            font-weight: bold;
-        }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 15px; }
+        .product-card { background: #fff; border-radius: 10px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .product-card img { width: 100%; border-radius: 5px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <img src="logo.jpg" alt="Tuski Logo" class="logo-img" onerror="this.style.display='none'">
+        <img src="logo.jpg" alt="Logo" class="logo-img" onerror="this.style.display='none'">
         <div class="logo-text">TUSKI COSMETICS</div>
-        <div style="font-size: 12px; color: #888; margin-bottom: 15px;">MARNEULİ - SMART SCANNER</div>
+        <div style="font-size: 11px; color: #888;">MARNEULİ - SMART SCANNER</div>
+
+        <div id="reader"></div>
+        <div id="result" style="font-weight: bold; margin-top: 10px; color: green;"></div>
 
         <div class="category-menu">
-            <button class="filter-btn active" data-filter="all">Все товары</button>
+            <button class="filter-btn active" data-filter="all">Все</button>
             <button class="filter-btn" data-filter="lipstick">Помады</button>
             <button class="filter-btn" data-filter="brush">Расчески</button>
-            <button class="filter-btn" data-filter="
-  
+            <button class="filter-btn" data-filter="perfume">Парфюм</button>
+        </div>
+    </div>
+
+    <div class="product-grid">
+        <div class="product-card lipstick">
+            <img src="lipstick1.jpg">
+            <div>Помада Matte</div>
+            <div style="color: #e91e63;">15.00 GEL</div>
+        </div>
+        <div class="product-card brush">
+            <img src="brush1.jpg">
+            <div>Расческа Wood</div>
+            <div style="color: #e91e63;">25.00 GEL</div>
+        </div>
+    </div>
+
+    <script>
+        // 1. ЛОГИКА СКАНЕРА
+        function onScanSuccess(decodedText, decodedResult) {
+            document.getElementById('result').innerText = "Товар найден: " + decodedText;
+            // Здесь можно добавить логику автоматического поиска товара по коду
+        }
+
+        let html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess);
+
+        // 2. ЛОГИКА ФИЛЬТРОВ (Кнопки)
+        const buttons = document.querySelectorAll('.filter-btn');
+        const cards = document.querySelectorAll('.product-card');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.getAttribute('data-filter');
+                cards.forEach(card => {
+                    if (filter === 'all' || card.classList.contains(filter)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
