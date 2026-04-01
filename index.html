@@ -6,40 +6,75 @@
     <title>TUSKI COSMETICS - Smart Scanner</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        body { font-family: sans-serif; margin: 0; padding: 0; background: #f9f9f9; text-align: center; }
-        .header { background: #fff; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .logo-img { max-width: 80px; }
-        .logo-text { font-size: 22px; font-weight: bold; letter-spacing: 1px; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background: #f4f4f4; text-align: center; }
+        
+        /* Шапка */
+        .header { background: #fff; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .logo-img { max-width: 80px; margin-bottom: 5px; }
+        .logo-text { font-size: 24px; font-weight: bold; letter-spacing: 2px; color: #000; }
+        .location { font-size: 11px; color: #888; margin-bottom: 15px; text-transform: uppercase; }
 
-        /* Стиль для окна сканера */
-        #reader {
-            width: 300px;
-            margin: 20px auto;
-            border-radius: 15px;
-            overflow: hidden;
-            border: 2px solid #000;
+        /* Окно сканера */
+        #reader { 
+            width: 100%; 
+            max-width: 400px; 
+            margin: 10px auto; 
+            border-radius: 15px; 
+            overflow: hidden; 
+            background: #000;
         }
+        #result { margin: 10px; font-weight: bold; color: #d81b60; min-height: 20px; }
 
         /* Кнопки категорий */
-        .category-menu { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 15px 0; }
-        .filter-btn { padding: 8px 15px; border-radius: 20px; border: 1px solid #ddd; background: #fff; cursor: pointer; }
-        .filter-btn.active { background: #000; color: #fff; }
+        .category-menu { 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            flex-wrap: wrap; 
+            padding: 10px; 
+            margin-bottom: 20px; 
+        }
+        .filter-btn { 
+            padding: 10px 20px; 
+            border-radius: 25px; 
+            border: 1px solid #ddd; 
+            background: #fff; 
+            cursor: pointer; 
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .filter-btn.active { background: #000; color: #fff; border-color: #000; }
 
         /* Сетка товаров */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 15px; }
-        .product-card { background: #fff; border-radius: 10px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .product-card img { width: 100%; border-radius: 5px; }
+        .product-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            gap: 15px; 
+            padding: 15px; 
+            max-width: 1000px; 
+            margin: 0 auto; 
+        }
+        .product-card { 
+            background: #fff; 
+            border-radius: 12px; 
+            padding: 12px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+            transition: 0.2s;
+        }
+        .product-card img { width: 100%; border-radius: 8px; aspect-ratio: 1/1; object-fit: cover; margin-bottom: 10px; }
+        .p-name { font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+        .p-price { color: #d81b60; font-weight: bold; font-size: 16px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <img src="logo.jpg" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+        <img src="logo.jpg" alt="Tuski Logo" class="logo-img" onerror="this.style.display='none'">
         <div class="logo-text">TUSKI COSMETICS</div>
-        <div style="font-size: 11px; color: #888;">MARNEULİ - SMART SCANNER</div>
+        <div class="location">MARNEULİ - SMART SCANNER</div>
 
         <div id="reader"></div>
-        <div id="result" style="font-weight: bold; margin-top: 10px; color: green;"></div>
+        <div id="result">Ожидание сканирования...</div>
 
         <div class="category-menu">
             <button class="filter-btn active" data-filter="all">Все</button>
@@ -49,37 +84,57 @@
         </div>
     </div>
 
-    <div class="product-grid">
+    <div class="product-grid" id="product-grid">
+        
         <div class="product-card lipstick">
-            <img src="lipstick1.jpg">
-            <div>Помада Matte</div>
-            <div style="color: #e91e63;">15.00 GEL</div>
+            <img src="lipstick1.jpg" alt="Помада">
+            <div class="p-name">Помада Matte Luxe</div>
+            <div class="p-price">18.00 GEL</div>
         </div>
+
         <div class="product-card brush">
-            <img src="brush1.jpg">
-            <div>Расческа Wood</div>
-            <div style="color: #e91e63;">25.00 GEL</div>
+            <img src="brush1.jpg" alt="Расческа">
+            <div class="p-name">Щетка для волос</div>
+            <div class="p-price =">22.00 GEL</div>
         </div>
+
+        <div class="product-card perfume">
+            <img src="perfume1.jpg" alt="Парфюм">
+            <div class="p-name">Аромат "Tuski Night"</div>
+            <div class="p-price">95.00 GEL</div>
+        </div>
+
     </div>
 
     <script>
-        // 1. ЛОГИКА СКАНЕРА
-        function onScanSuccess(decodedText, decodedResult) {
-            document.getElementById('result').innerText = "Товар найден: " + decodedText;
-            // Здесь можно добавить логику автоматического поиска товара по коду
-        }
+        // 1. НАСТРОЙКА СКАНЕРА (Авто-запуск задней камеры)
+        const html5QrCode = new Html5Qrcode("reader");
+        const qrConfig = { fps: 10, qrbox: { width: 250, height: 250 } };
 
-        let html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
-        html5QrcodeScanner.render(onScanSuccess);
+        html5QrCode.start(
+            { facingMode: "environment" }, // Сразу задняя камера
+            qrConfig,
+            (decodedText) => {
+                // Что делать при успешном сканировании
+                document.getElementById('result').innerText = "Найден код: " + decodedText;
+                alert("Код считан: " + decodedText);
+            }
+        ).catch(err => {
+            console.error("Ошибка камеры:", err);
+            document.getElementById('result').innerText = "Ошибка: Доступ к камере заблокирован.";
+        });
 
-        // 2. ЛОГИКА ФИЛЬТРОВ (Кнопки)
+        // 2. ЛОГИКА КНОПОК КАТЕГОРИЙ
         const buttons = document.querySelectorAll('.filter-btn');
         const cards = document.querySelectorAll('.product-card');
 
         buttons.forEach(btn => {
             btn.addEventListener('click', () => {
+                // Переключение цвета кнопок
                 buttons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
+
+                // Фильтрация карточек
                 const filter = btn.getAttribute('data-filter');
                 cards.forEach(card => {
                     if (filter === 'all' || card.classList.contains(filter)) {
@@ -91,5 +146,6 @@
             });
         });
     </script>
+
 </body>
 </html>
