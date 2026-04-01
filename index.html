@@ -7,63 +7,52 @@
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background: #f4f4f4; text-align: center; }
-        
-        /* Шапка */
         .header { background: #fff; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .logo-img { max-width: 80px; margin-bottom: 5px; }
         .logo-text { font-size: 24px; font-weight: bold; letter-spacing: 2px; color: #000; }
         .location { font-size: 11px; color: #888; margin-bottom: 15px; text-transform: uppercase; }
 
-        /* Окно сканера */
-        #reader { 
-            width: 100%; 
-            max-width: 400px; 
-            margin: 10px auto; 
-            border-radius: 15px; 
-            overflow: hidden; 
+        /* Контейнер для сканера */
+        .scanner-container {
+            width: 90%;
+            max-width: 400px;
+            margin: 15px auto;
             background: #000;
+            border-radius: 15px;
+            position: relative;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
+
+        #reader { width: 100%; }
+
+        /* Кнопка запуска камеры */
+        .start-btn {
+            padding: 12px 25px;
+            font-size: 16px;
+            background: #d81b60;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
         #result { margin: 10px; font-weight: bold; color: #d81b60; min-height: 20px; }
 
-        /* Кнопки категорий */
-        .category-menu { 
-            display: flex; 
-            justify-content: center; 
-            gap: 10px; 
-            flex-wrap: wrap; 
-            padding: 10px; 
-            margin-bottom: 20px; 
-        }
-        .filter-btn { 
-            padding: 10px 20px; 
-            border-radius: 25px; 
-            border: 1px solid #ddd; 
-            background: #fff; 
-            cursor: pointer; 
-            font-size: 14px;
-            transition: 0.3s;
-        }
+        /* Категории */
+        .category-menu { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; padding: 10px; margin-bottom: 20px; }
+        .filter-btn { padding: 10px 20px; border-radius: 25px; border: 1px solid #ddd; background: #fff; cursor: pointer; transition: 0.3s; }
         .filter-btn.active { background: #000; color: #fff; border-color: #000; }
 
         /* Сетка товаров */
-        .product-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
-            gap: 15px; 
-            padding: 15px; 
-            max-width: 1000px; 
-            margin: 0 auto; 
-        }
-        .product-card { 
-            background: #fff; 
-            border-radius: 12px; 
-            padding: 12px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
-            transition: 0.2s;
-        }
-        .product-card img { width: 100%; border-radius: 8px; aspect-ratio: 1/1; object-fit: cover; margin-bottom: 10px; }
-        .p-name { font-size: 14px; font-weight: 600; margin-bottom: 5px; }
-        .p-price { color: #d81b60; font-weight: bold; font-size: 16px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; padding: 15px; max-width: 1000px; margin: 0 auto; }
+        .product-card { background: #fff; border-radius: 12px; padding: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .product-card img { width: 100%; border-radius: 8px; aspect-ratio: 1/1; object-fit: cover; }
     </style>
 </head>
 <body>
@@ -73,8 +62,11 @@
         <div class="logo-text">TUSKI COSMETICS</div>
         <div class="location">MARNEULİ - SMART SCANNER</div>
 
-        <div id="reader"></div>
-        <div id="result">Ожидание сканирования...</div>
+        <div class="scanner-container">
+            <button id="start-camera-btn" class="start-btn">Нажать для сканирования</button>
+            <div id="reader"></div>
+        </div>
+        <div id="result">Сканер готов к работе</div>
 
         <div class="category-menu">
             <button class="filter-btn active" data-filter="all">Все</button>
@@ -84,68 +76,55 @@
         </div>
     </div>
 
-    <div class="product-grid" id="product-grid">
-        
+    <div class="product-grid">
         <div class="product-card lipstick">
-            <img src="lipstick1.jpg" alt="Помада">
-            <div class="p-name">Помада Matte Luxe</div>
-            <div class="p-price">18.00 GEL</div>
+            <img src="lipstick1.jpg">
+            <div style="font-weight:bold; margin-top:5px;">Помада Matte</div>
+            <div style="color:#d81b60;">18.00 GEL</div>
         </div>
-
         <div class="product-card brush">
-            <img src="brush1.jpg" alt="Расческа">
-            <div class="p-name">Щетка для волос</div>
-            <div class="p-price =">22.00 GEL</div>
+            <img src="brush1.jpg">
+            <div style="font-weight:bold; margin-top:5px;">Расческа Wood</div>
+            <div style="color:#d81b60;">22.00 GEL</div>
         </div>
-
-        <div class="product-card perfume">
-            <img src="perfume1.jpg" alt="Парфюм">
-            <div class="p-name">Аромат "Tuski Night"</div>
-            <div class="p-price">95.00 GEL</div>
-        </div>
-
     </div>
 
     <script>
-        // 1. НАСТРОЙКА СКАНЕРА (Авто-запуск задней камеры)
         const html5QrCode = new Html5Qrcode("reader");
-        const qrConfig = { fps: 10, qrbox: { width: 250, height: 250 } };
+        const startBtn = document.getElementById('start-camera-btn');
+        const resultDiv = document.getElementById('result');
 
-        html5QrCode.start(
-            { facingMode: "environment" }, // Сразу задняя камера
-            qrConfig,
-            (decodedText) => {
-                // Что делать при успешном сканировании
-                document.getElementById('result').innerText = "Найден код: " + decodedText;
-                alert("Код считан: " + decodedText);
-            }
-        ).catch(err => {
-            console.error("Ошибка камеры:", err);
-            document.getElementById('result').innerText = "Ошибка: Доступ к камере заблокирован.";
+        // Функция запуска при клике
+        startBtn.addEventListener('click', () => {
+            startBtn.style.display = 'none'; // Прячем кнопку после клика
+            
+            html5QrCode.start(
+                { facingMode: "environment" }, 
+                { fps: 10, qrbox: { width: 250, height: 250 } },
+                (decodedText) => {
+                    resultDiv.innerText = "Найден код: " + decodedText;
+                    alert("Товар: " + decodedText);
+                }
+            ).catch(err => {
+                startBtn.style.display = 'block'; // Если ошибка, возвращаем кнопку
+                resultDiv.innerText = "Ошибка доступа к камере";
+            });
         });
 
-        // 2. ЛОГИКА КНОПОК КАТЕГОРИЙ
+        // Логика фильтров категорий
         const buttons = document.querySelectorAll('.filter-btn');
         const cards = document.querySelectorAll('.product-card');
 
         buttons.forEach(btn => {
             btn.addEventListener('click', () => {
-                // Переключение цвета кнопок
                 buttons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-
-                // Фильтрация карточек
                 const filter = btn.getAttribute('data-filter');
                 cards.forEach(card => {
-                    if (filter === 'all' || card.classList.contains(filter)) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
+                    card.style.display = (filter === 'all' || card.classList.contains(filter)) ? 'block' : 'none';
                 });
             });
         });
     </script>
-
 </body>
 </html>
