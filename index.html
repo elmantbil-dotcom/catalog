@@ -3,59 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TUSKI COSMETICS - Smart Scanner</title>
+    <title>TUSKI COSMETICS - Smart Scanner & Catalog</title>
+    
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <style>
-        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4; text-align: center; color: #333; }
-        .header { background: #fff; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .logo-img { max-width: 80px; margin-bottom: 5px; }
-        .logo-text { font-size: 24px; font-weight: bold; letter-spacing: 2px; color: #000; }
-        .location { font-size: 11px; color: #888; margin-bottom: 15px; text-transform: uppercase; }
 
-        /* სკანერის კონტეინერი */
-        .scanner-container {
+    <style>
+        /* Общие настройки стиля */
+        body { 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background: #f8f8f8; 
+            text-align: center; 
+            color: #222; 
+        }
+
+        /* Шапка сайта */
+        .header { 
+            background: #ffffff; 
+            padding: 25px 15px; 
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08); 
+        }
+        .logo-img { max-width: 90px; margin-bottom: 10px; }
+        .logo-text { 
+            font-size: 26px; 
+            font-weight: bold; 
+            letter-spacing: 3px; 
+            color: #000; 
+            margin-bottom: 5px;
+        }
+        .location { 
+            font-size: 12px; 
+            color: #999; 
+            margin-bottom: 20px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+        }
+
+        /* Контейнер сканера */
+        .scanner-box {
             width: 90%;
             max-width: 400px;
-            margin: 15px auto;
-            background: #000;
-            border-radius: 15px;
-            position: relative;
+            margin: 0 auto 25px;
+            background: #1a1a1a;
+            border-radius: 20px;
             min-height: 250px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            border: 3px solid #eee;
         }
-
         #reader { width: 100%; }
-
-        /* ჩართვის ღილაკი */
         .start-btn {
-            padding: 12px 25px;
-            font-size: 16px;
+            padding: 14px 28px;
+            font-size: 15px;
             background: #000;
             color: #fff;
             border: 2px solid #fff;
-            border-radius: 30px;
+            border-radius: 40px;
             cursor: pointer;
-            z-index: 10;
             font-weight: bold;
+            transition: 0.3s;
+        }
+        .start-btn:hover { background: #333; }
+        #result { margin-top: 15px; font-size: 14px; color: #d81b60; font-weight: bold; }
+
+        /* Меню категорий */
+        .category-menu { 
+            display: flex; 
+            justify-content: center; 
+            gap: 8px; 
+            flex-wrap: wrap; 
+            padding: 10px; 
+            margin-bottom: 25px; 
+        }
+        .filter-btn { 
+            padding: 10px 18px; 
+            border-radius: 30px; 
+            border: 1px solid #ddd; 
+            background: #fff; 
+            cursor: pointer; 
+            font-size: 13px; 
+            transition: 0.3s;
+            font-weight: 500;
+        }
+        .filter-btn.active { 
+            background: #000; 
+            color: #fff; 
+            border-color: #000; 
         }
 
-        #result { margin: 10px; font-weight: bold; color: #d81b60; min-height: 20px; font-size: 14px; }
-
-        /* კატეგორიები */
-        .category-menu { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; padding: 10px; margin-bottom: 20px; }
-        .filter-btn { padding: 10px 20px; border-radius: 25px; border: 1px solid #ddd; background: #fff; cursor: pointer; transition: 0.3s; font-size: 13px; }
-        .filter-btn.active { background: #000; color: #fff; border-color: #000; }
-
-        /* პროდუქტების ბადე */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; padding: 15px; max-width: 1000px; margin: 0 auto; }
-        .product-card { background: #fff; border-radius: 12px; padding: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .product-card img { width: 100%; border-radius: 8px; aspect-ratio: 1/1; object-fit: cover; }
-        .p-name { font-weight: bold; margin-top: 8px; font-size: 14px; }
-        .p-price { color: #d81b60; font-weight: bold; margin-top: 5px; }
+        /* Сетка товаров */
+        .product-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            gap: 20px; 
+            padding: 15px; 
+            max-width: 1100px; 
+            margin: 0 auto; 
+        }
+        .product-card { 
+            background: #fff; 
+            border-radius: 15px; 
+            padding: 15px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.04); 
+            text-align: left;
+            transition: 0.3s;
+        }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-card img { 
+            width: 100%; 
+            border-radius: 10px; 
+            aspect-ratio: 1/1; 
+            object-fit: cover; 
+            background: #f0f0f0;
+        }
+        .p-name { font-weight: bold; margin: 12px 0 5px; font-size: 15px; color: #111; }
+        .p-price { color: #d81b60; font-weight: bold; font-size: 17px; }
+        .pro-label { 
+            display: inline-block;
+            background: #f0f0f0;
+            color: #666;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 5px;
+            margin-top: 8px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -65,67 +141,97 @@
         <div class="logo-text">TUSKI COSMETICS</div>
         <div class="location">MARNEULI - SMART SCANNER</div>
 
-        <div class="scanner-container">
-            <button id="start-camera-btn" class="start-btn">სკანერის ჩართვა</button>
+        <div class="scanner-box">
+            <button id="start-camera-btn" class="start-btn">სკანერის ჩართვა (Start Scanner)</button>
             <div id="reader"></div>
         </div>
-        <div id="result">სკანერი მზად არის</div>
+        <div id="result">სკანერი მზად არის (Scanner Ready)</div>
 
         <div class="category-menu">
             <button class="filter-btn active" data-filter="all">ყველა (All)</button>
             <button class="filter-btn" data-filter="lipstick">ტუჩსაცხი (Lipstick)</button>
             <button class="filter-btn" data-filter="brush">სავარცხელი (Brush)</button>
             <button class="filter-btn" data-filter="perfume">პარფიუმერია (Perfume)</button>
+            <button class="filter-btn" data-filter="salon">სალონი (Salon / PRO)</button>
         </div>
     </div>
 
-    <div class="product-grid">
+    <div class="product-grid" id="product-grid">
+        
         <div class="product-card lipstick">
-            <img src="lipstick1.jpg">
-            <div class="p-name">Matte Lipstick</div>
+            <img src="lipstick1.jpg" alt="Lipstick">
+            <div class="p-name">Matte Luxe Lipstick</div>
             <div class="p-price">18.00 GEL</div>
         </div>
+
         <div class="product-card brush">
-            <img src="brush1.jpg">
-            <div class="p-name">Hair Brush</div>
+            <img src="brush1.jpg" alt="Brush">
+            <div class="p-name">Professional Hair Brush</div>
             <div class="p-price">22.00 GEL</div>
         </div>
+
+        <div class="product-card salon">
+            <img src="pro_shampoo.jpg" alt="Pro Product">
+            <div class="p-name">Pro-Keratin Shampoo (1L)</div>
+            <div class="p-price">55.00 GEL</div>
+            <div class="pro-label">მხოლოდ სალონებისთვის (Pro Only)</div>
+        </div>
+
+        <div class="product-card salon">
+            <img src="pro_color.jpg" alt="Pro Product">
+            <div class="p-name">Hair Color Master Set</div>
+            <div class="p-price">40.00 GEL</div>
+            <div class="pro-label">მხოლოდ სალონებისთვის (Pro Only)</div>
+        </div>
+
     </div>
 
     <script>
+        // Инициализация сканера
         const html5QrCode = new Html5Qrcode("reader");
         const startBtn = document.getElementById('start-camera-btn');
         const resultDiv = document.getElementById('result');
 
+        // Запуск камеры по нажатию
         startBtn.addEventListener('click', () => {
             startBtn.style.display = 'none'; 
             
             html5QrCode.start(
-                { facingMode: "environment" }, 
+                { facingMode: "environment" }, // Задняя камера
                 { fps: 10, qrbox: { width: 250, height: 250 } },
                 (decodedText) => {
-                    resultDiv.innerText = "კოდი ნაპოვნია: " + decodedText;
-                    alert("პროდუქტის კოდი: " + decodedText);
+                    resultDiv.innerText = "კოდი: " + decodedText;
+                    alert("კოდი ნაპოვნია: " + decodedText);
                 }
             ).catch(err => {
                 startBtn.style.display = 'block'; 
-                resultDiv.innerText = "კამერასთან წვდომის შეცდომა";
+                resultDiv.innerText = "შეცდომა: კამერა ვერ ჩაირთო";
+                console.error(err);
             });
         });
 
-        const buttons = document.querySelectorAll('.filter-btn');
-        const cards = document.querySelectorAll('.product-card');
+        // Логика фильтрации категорий
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const productCards = document.querySelectorAll('.product-card');
 
-        buttons.forEach(btn => {
+        filterButtons.forEach(btn => {
             btn.addEventListener('click', () => {
-                buttons.forEach(b => b.classList.remove('active'));
+                // Подсветка кнопок
+                filterButtons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
+
+                // Показ/скрытие товаров
                 const filter = btn.getAttribute('data-filter');
-                cards.forEach(card => {
-                    card.style.display = (filter === 'all' || card.classList.contains(filter)) ? 'block' : 'none';
+                productCards.forEach(card => {
+                    if (filter === 'all' || card.classList.contains(filter)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
                 });
             });
         });
     </script>
+
 </body>
 </html>
