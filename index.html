@@ -14,31 +14,32 @@
         .logo-text { font-size: 26px; font-weight: bold; letter-spacing: 3px; color: #000; margin-bottom: 5px; }
         .sub-logo { font-size: 12px; color: #888; letter-spacing: 1px; margin-bottom: 15px; }
         
-        /* Сканер */
         #reader { width: 100%; max-width: 300px; margin: 0 auto; border-radius: 15px; overflow: hidden; background: #000; }
         .scanner-section { padding: 10px; margin-bottom: 10px; }
         #result { font-size: 14px; margin-top: 10px; font-weight: bold; color: #d81b60; }
         .scan-btn { padding: 12px 25px; background: #000; color: #fff; border: none; border-radius: 25px; cursor: pointer; font-size: 14px; }
 
-        /* Меню категорий */
         .category-menu { margin: 15px 0; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; padding: 0 10px; }
         .filter-btn { padding: 8px 18px; border-radius: 20px; border: 1px solid #ddd; background: #fff; cursor: pointer; transition: 0.3s; font-size: 13px; }
         .filter-btn.active { background: #000; color: #fff; border-color: #000; }
 
-        /* Сетка товаров */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
         
-        /* Карточка товара */
         .product-card { background: #fff; border-radius: 15px; padding: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); text-align: left; transition: 0.3s; }
         .product-card img { width: 100%; height: 280px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; background: #fafafa; }
         .p-name { font-weight: bold; font-size: 18px; margin-bottom: 8px; color: #222; }
         .p-price { color: #d81b60; font-weight: bold; font-size: 22px; margin-bottom: 10px; }
         .pro-label { background: #000; color: #fff; font-size: 11px; padding: 4px 10px; border-radius: 5px; display: inline-block; margin-bottom: 12px; font-weight: bold; }
 
-        /* Описания */
         .p-description { font-size: 13px; color: #555; line-height: 1.6; border-top: 1px solid #eee; margin-top: 12px; padding-top: 12px; }
         .p-description p { margin: 6px 0; }
         .lang-tag { color: #333; background: #f0f0f0; padding: 2px 5px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-right: 6px; text-transform: uppercase; }
+
+        .footer { background: #fff; padding: 40px 20px; margin-top: 50px; border-top: 1px solid #ddd; text-align: center; }
+        .footer-logo { font-weight: bold; font-size: 20px; margin-bottom: 15px; }
+        .contact-info { color: #555; font-size: 15px; margin: 8px 0; }
+        .map-btn { display: inline-block; margin-top: 15px; color: #d81b60; text-decoration: none; font-weight: bold; border: 2px solid #d81b60; padding: 10px 20px; border-radius: 25px; transition: 0.3s; }
+        .map-btn:hover { background: #d81b60; color: #fff; }
 
         @media (max-width: 600px) { .product-grid { grid-template-columns: 1fr; } }
     </style>
@@ -64,12 +65,25 @@
         <p>იტვირთება პროდუქცია... (Loading...)</p>
     </div>
 
+    <div class="footer">
+        <div class="footer-logo">TUSKI COSMETICS</div>
+        <div class="contact-info">📍 მისამართი: მარნეული, რუსთაველი 41</div>
+        <div class="contact-info">📞 ტელეფონი: <a href="tel:+995571244884" style="color: inherit; text-decoration: none;">571 24 48 84</a></div>
+        
+        <div style="margin-top: 20px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=Rustaveli+41,+Marneuli,+Georgia" target="_blank" class="map-btn">
+                📍 ნახვა რუკაზე (Google Maps)
+            </a>
+        </div>
+        <p style="font-size: 11px; color: #bbb; margin-top: 30px;">© 2026 TUSKI COSMETICS. All rights reserved.</p>
+    </div>
+
     <script>
         const excelFile = './products.xlsx';
 
         async function loadProducts() {
             try {
-                const response = await fetch(excelFile + '?v=' + new Date().getTime()); // Добавили анти-кэш
+                const response = await fetch(excelFile + '?v=' + new Date().getTime());
                 const arrayBuffer = await response.arrayBuffer();
                 const data = new Uint8Array(arrayBuffer);
                 const workbook = XLSX.read(data, { type: 'array' });
@@ -91,14 +105,13 @@
             products.forEach(p => {
                 const isPro = String(p.Is_Pro).toLowerCase() === 'yes';
                 const card = document.createElement('div');
-                // Привязываем категорию как класс для фильтрации
                 const catClass = p.Category ? String(p.Category).toLowerCase().trim() : 'other';
                 card.className = `product-card ${catClass}`;
                 card.id = `item-${p.Barcode}`;
 
                 card.innerHTML = `
                     <img src="${p.Barcode}.jpg" onerror="this.src='https://via.placeholder.com/300x400?text=No+Photo'">
-                    <div class="p-name">${p.Title || 'Без названия'}</div>
+                    <div class="p-name">${p.Title || '-'}</div>
                     <div class="p-price">${p.Price || '0.00'} GEL</div>
                     ${isPro ? '<div class="pro-label">მხოლოდ სალონებისთვის (Pro Only)</div>' : ''}
                     <div class="p-description">
@@ -113,7 +126,6 @@
 
         function setupFilters(products) {
             const menu = document.getElementById('category-menu');
-            // Собираем уникальные категории
             const rawCategories = [...new Set(products.map(p => p.Category))].filter(Boolean);
             
             rawCategories.forEach(cat => {
@@ -122,17 +134,15 @@
                 btn.className = 'filter-btn';
                 btn.setAttribute('data-filter', cleanCat);
                 
-                // Перевод названий для кнопок
                 let btnName = cleanCat.charAt(0).toUpperCase() + cleanCat.slice(1);
-                if(cleanCat === 'perfume') btnName = 'პარფიუმერია (Perfume)';
-                if(cleanCat === 'lipstick') btnName = 'ტუჩსაცხი (Lipstick)';
-                if(cleanCat === 'salon') btnName = 'სალონი (Salon)';
+                if(cleanCat === 'perfume') btnName = 'პარფიუმერია';
+                if(cleanCat === 'lipstick') btnName = 'ტუჩსაცხი';
+                if(cleanCat === 'salon') btnName = 'სალონი (Pro)';
                 
                 btn.innerText = btnName;
                 menu.appendChild(btn);
             });
 
-            // Логика фильтрации
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -150,7 +160,6 @@
             });
         }
 
-        // Сканер штрихкодов
         const html5QrCode = new Html5Qrcode("reader");
         document.getElementById('start-scan').addEventListener('click', () => {
             html5QrCode.start(
@@ -159,12 +168,12 @@
                 (decodedText) => {
                     const foundItem = document.getElementById("item-" + decodedText);
                     if (foundItem) {
-                        document.getElementById('result').innerText = "Найдено: " + decodedText;
+                        document.getElementById('result').innerText = "ნაპოვნია: " + decodedText;
                         foundItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         foundItem.style.border = "3px solid #d81b60";
                         setTimeout(() => { foundItem.style.border = "none"; }, 4000);
                     } else {
-                        document.getElementById('result').innerText = "Код " + decodedText + " не найден";
+                        document.getElementById('result').innerText = "კოდი " + decodedText + " ვერ მოიძებნა";
                     }
                 }
             ).catch(err => console.error("Camera error", err));
