@@ -3,35 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TUSKI COSMETICS - Smart Catalog</title>
+    <title>TUSKI COSMETICS</title>
     <style>
         body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; background-color: #f8f9fa; color: #333; text-align: center; }
         header { padding: 30px 10px; background: #fff; border-bottom: 1px solid #eee; }
         h1 { margin: 0; font-size: 26px; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; }
-        .sub-logo { font-size: 13px; color: #888; margin-bottom: 20px; text-transform: uppercase; }
+        .sub-logo { font-size: 13px; color: #888; margin-bottom: 20px; }
         
-        /* Кнопки управления */
-        .btn-scan { background: #222; color: white; padding: 12px 30px; border-radius: 50px; border: none; font-size: 16px; cursor: pointer; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn-scan { background: #222; color: white; padding: 12px 30px; border-radius: 50px; border: none; font-size: 16px; cursor: pointer; margin-bottom: 20px; }
         .category-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; padding: 0 10px; }
         .btn-cat { background: #fff; border: 1px solid #ddd; padding: 8px 18px; border-radius: 50px; cursor: pointer; font-size: 14px; transition: 0.3s; color: #555; }
         .btn-cat.active { background: #222; color: #fff; border-color: #222; }
 
-        /* Сетка товаров */
         #catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 15px; }
-        .card { background: #fff; padding: 12px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); text-align: left; position: relative; }
-        .card img { width: 100%; border-radius: 10px; cursor: zoom-in; transition: 0.3s; display: block; }
-        .card img:hover { opacity: 0.9; }
-        .card h3 { font-size: 14px; margin: 12px 0 5px; height: 34px; overflow: hidden; line-height: 1.2; color: #222; }
+        .card { background: #fff; padding: 12px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); text-align: left; }
+        .card img { width: 100%; border-radius: 10px; cursor: zoom-in; transition: 0.3s; }
+        .card h3 { font-size: 14px; margin: 12px 0 5px; height: 34px; overflow: hidden; }
         .card .price { color: #b02a37; font-weight: bold; font-size: 17px; margin-bottom: 8px; }
-        .card .label { font-size: 10px; color: #999; text-transform: uppercase; border-top: 1px solid #eee; pt: 5px; display: block; margin-top: 5px; }
 
-        /* Модальное окно (Увеличение фото) */
-        #imgModal { display: none; position: fixed; z-index: 10000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; cursor: pointer; }
-        #imgModal img { max-width: 95%; max-height: 85%; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        #imgModal { display: none; position: fixed; z-index: 10000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); justify-content: center; align-items: center; }
+        #imgModal img { max-width: 95%; max-height: 85%; border-radius: 8px; }
 
-        /* Сканер */
         #scanner-layer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; }
-        #close-x { position: absolute; top: 20px; right: 20px; background: #ff4d4d; color: white; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 24px; cursor: pointer; z-index: 10001; display: flex; align-items: center; justify-content: center; }
+        #close-x { position: absolute; top: 20px; right: 20px; background: #ff4d4d; color: white; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 24px; cursor: pointer; z-index: 10001; }
     </style>
 </head>
 <body>
@@ -40,13 +34,12 @@
     <h1>TUSKI COSMETICS</h1>
     <div class="sub-logo">MARNEULI SMART CATALOG</div>
     <button class="btn-scan" onclick="startScanner()">ჩართე სკანერი (Start Scan)</button>
-    
     <div class="category-container" id="category-box">
         <button class="btn-cat active" onclick="filter('All', this)">ყველა (All)</button>
     </div>
 </header>
 
-<div id="loading" style="padding: 50px; font-size: 18px; color: #888;">იტვირთება... (Loading...)</div>
+<div id="loading" style="padding: 50px; color: #888;">იტვირთება... (Loading...)</div>
 <div id="catalog"></div>
 
 <div id="scanner-layer">
@@ -60,47 +53,47 @@
 
 <script src="https://unpkg.com/html5-qrcode"></script>
 <script>
-    // Если твой файл называется по-другому, измени это имя:
-    const url = 'products.csv'; 
+    // Код проверит эти имена по очереди:
+    const fileNames = ['products.csv', 'Products.csv', 'data.csv', 'Data.csv', 'base.csv'];
     let products = [];
 
     async function fetchData() {
-        try {
-            const res = await fetch(url);
-            if (!res.ok) throw new Error("File not found");
-            const text = await res.text();
-            
-            const rows = text.split('\n').filter(row => row.trim() !== '').slice(1);
-            products = rows.map(r => {
-                const c = r.split(',');
-                return { name: c[0], cat: c[1], price: c[2], img: c[3], code: c[4] };
-            });
-
-            document.getElementById('loading').style.display = 'none';
-            createCategories();
-            render(products);
-        } catch (e) { 
-            document.getElementById('loading').innerHTML = "შეცდომაა: ფაილი ვერ მოიძებნა (Error: CSV not found)"; 
+        let text = null;
+        for (let name of fileNames) {
+            try {
+                const res = await fetch(name);
+                if (res.ok) {
+                    text = await res.text();
+                    console.log("Found file:", name);
+                    break; 
+                }
+            } catch (e) {}
         }
+
+        if (!text) {
+            document.getElementById('loading').innerHTML = "ფაილი ვერ მოიძებნა. შეამოწმეთ ფაილის სახელი GitHub-ზე.<br>(CSV not found. Check filename on GitHub.)";
+            return;
+        }
+
+        const rows = text.split('\n').filter(row => row.trim() !== '').slice(1);
+        products = rows.map(r => {
+            const c = r.split(',');
+            return { name: c[0], cat: c[1], price: c[2], img: c[3], code: c[4] };
+        });
+
+        document.getElementById('loading').style.display = 'none';
+        createCategories();
+        render(products);
     }
 
     function createCategories() {
         const cats = ['All', ...new Set(products.map(p => p.cat))];
         const box = document.getElementById('category-box');
-        box.innerHTML = cats.map(c => `
-            <button class="btn-cat ${c==='All'?'active':''}" onclick="filter('${c}', this)">
-                ${translate(c)}
-            </button>`).join('');
+        box.innerHTML = cats.map(c => `<button class="btn-cat ${c==='All'?'active':''}" onclick="filter('${c}', this)">${translate(c)}</button>`).join('');
     }
 
     function translate(c) {
-        const lang = {
-            'All': 'ყველა',
-            'perfume': 'პარფიუმერია',
-            'lipstick': 'ტუჩსაცხი',
-            'salon': 'სალონი (Pro)',
-            'care': 'მოვლა'
-        };
+        const lang = { 'All':'ყველა', 'perfume':'პარფიუმერია', 'lipstick':'ტუჩსაცხი', 'salon':'სალონი (Pro)' };
         return lang[c] || c;
     }
 
@@ -111,7 +104,6 @@
                 <img src="${p.img}" onclick="zoom('${p.img}')" onerror="this.src='https://via.placeholder.com/150?text=No+Photo'">
                 <h3>${p.name}</h3>
                 <div class="price">${p.price} GEL</div>
-                <span class="label">Tuski cosmetics</span>
             </div>
         `).join('');
     }
@@ -131,7 +123,7 @@
     const scanner = new Html5Qrcode("reader");
     function startScanner() {
         document.getElementById('scanner-layer').style.display = 'block';
-        scanner.start({ facingMode: "environment" }, { fps: 15, qrbox: 250 }, (text) => {
+        scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (text) => {
             stopScanner();
             const found = products.filter(p => p.code && p.code.trim() === text.trim());
             render(found);
@@ -139,11 +131,7 @@
     }
 
     function stopScanner() {
-        scanner.stop().then(() => {
-            document.getElementById('scanner-layer').style.display = 'none';
-        }).catch(() => {
-            document.getElementById('scanner-layer').style.display = 'none';
-        });
+        scanner.stop().then(() => { document.getElementById('scanner-layer').style.display = 'none'; });
     }
 
     window.onload = fetchData;
