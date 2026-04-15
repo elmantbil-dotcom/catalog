@@ -26,7 +26,7 @@
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
         
         .product-card { background: #fff; border-radius: 15px; padding: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); text-align: left; transition: 0.3s; }
-        .product-card img { width: 100%; height: 280px; object-fit: contain; border-radius: 10px; margin-bottom: 12px; background: #fafafa; }
+        .product-card img { width: 100%; height: 280px; object-fit: contain; border-radius: 10px; margin-bottom: 12px; background: #fafafa; cursor: zoom-in; }
         .p-name { font-weight: bold; font-size: 18px; margin-bottom: 8px; color: #222; }
         .p-price { color: #d81b60; font-weight: bold; font-size: 22px; margin-bottom: 10px; }
         .pro-label { background: #000; color: #fff; font-size: 11px; padding: 4px 10px; border-radius: 5px; display: inline-block; margin-bottom: 12px; font-weight: bold; }
@@ -34,6 +34,34 @@
         .p-description { font-size: 13px; color: #555; line-height: 1.6; border-top: 1px solid #eee; margin-top: 12px; padding-top: 12px; }
         .p-description p { margin: 6px 0; }
         .lang-tag { color: #333; background: #f0f0f0; padding: 2px 5px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-right: 6px; text-transform: uppercase; }
+
+        /* --- ახალი სტილები სურათის გასადიდებლად (Lightbox) --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            cursor: pointer;
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+        .modal-caption {
+            color: #ccc;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
 
         .footer { background: #fff; padding: 40px 20px; margin-top: 50px; border-top: 1px solid #ddd; text-align: center; }
         .footer-logo { font-weight: bold; font-size: 20px; margin-bottom: 15px; }
@@ -65,121 +93,14 @@
         <p>იტვირთება პროდუქცია... (Loading...)</p>
     </div>
 
-   <div class="footer">
-    <div class="footer-logo">TUSKI COSMETICS</div>
-    <div class="contact-info">📍 მისამართი: მარნეული, რუსთაველი 41</div>
-    <div class="contact-info">📞 ტელეფონი: <a href="tel:+995571244884" style="color: inherit; text-decoration: none;">571 24 48 84</a></div>
-    
-    <div style="margin-top: 20px;">
-        <a href="https://www.google.com/maps/dir/?api=1&destination=41.47825,44.80844" target="_blank" class="map-btn">
-            🚗 მარშრუტის ჩვენება (Get Directions)
-        </a>
-    </div>
-    <p style="font-size: 11px; color: #bbb; margin-top: 30px;">© 2026 TUSKI COSMETICS. All rights reserved.</p>
-</div>
-
-    <script>
-        const excelFile = './products.xlsx';
-
-        async function loadProducts() {
-            try {
-                const response = await fetch(excelFile + '?v=' + new Date().getTime());
-                const arrayBuffer = await response.arrayBuffer();
-                const data = new Uint8Array(arrayBuffer);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                const products = XLSX.utils.sheet_to_json(sheet);
-
-                renderProducts(products);
-                setupFilters(products);
-            } catch (error) {
-                console.error("Excel error:", error);
-                document.getElementById('product-grid').innerHTML = "<p>შეცდომა: products.xlsx ვერ მოიძებნა.</p>";
-            }
-        }
-
-        function renderProducts(products) {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = '';
-
-            products.forEach(p => {
-                const isPro = String(p.Is_Pro).toLowerCase() === 'yes';
-                const card = document.createElement('div');
-                const catClass = p.Category ? String(p.Category).toLowerCase().trim() : 'other';
-                card.className = `product-card ${catClass}`;
-                card.id = `item-${p.Barcode}`;
-
-                card.innerHTML = `
-                    <img src="${p.Barcode}.jpg" onerror="this.src='https://via.placeholder.com/300x400?text=No+Photo'">
-                    <div class="p-name">${p.Title || '-'}</div>
-                    <div class="p-price">${p.Price || '0.00'} GEL</div>
-                    ${isPro ? '<div class="pro-label">მხოლოდ სალონებისთვის (Pro Only)</div>' : ''}
-                    <div class="p-description">
-                        <p><span class="lang-tag">GE</span> ${p.Description_GE || '-'}</p>
-                        <p><span class="lang-tag">AZ</span> ${p.Description_AZ || '-'}</p>
-                        <p><span class="lang-tag">RU</span> ${p.Description_RU || '-'}</p>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function setupFilters(products) {
-            const menu = document.getElementById('category-menu');
-            const rawCategories = [...new Set(products.map(p => p.Category))].filter(Boolean);
-            
-            rawCategories.forEach(cat => {
-                const cleanCat = String(cat).toLowerCase().trim();
-                const btn = document.createElement('button');
-                btn.className = 'filter-btn';
-                btn.setAttribute('data-filter', cleanCat);
-                
-                let btnName = cleanCat.charAt(0).toUpperCase() + cleanCat.slice(1);
-                if(cleanCat === 'perfume') btnName = 'პარფიუმერია';
-                if(cleanCat === 'lipstick') btnName = 'ტუჩსაცხი';
-                if(cleanCat === 'salon') btnName = 'სალონი (Pro)';
-                
-                btn.innerText = btnName;
-                menu.appendChild(btn);
-            });
-
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    const filter = btn.getAttribute('data-filter');
-                    
-                    document.querySelectorAll('.product-card').forEach(card => {
-                        if (filter === 'all' || card.classList.contains(filter)) {
-                            card.style.display = 'block';
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
-                });
-            });
-        }
-
-        const html5QrCode = new Html5Qrcode("reader");
-        document.getElementById('start-scan').addEventListener('click', () => {
-            html5QrCode.start(
-                { facingMode: "environment" }, 
-                { fps: 10, qrbox: 250 },
-                (decodedText) => {
-                    const foundItem = document.getElementById("item-" + decodedText);
-                    if (foundItem) {
-                        document.getElementById('result').innerText = "ნაპოვნია: " + decodedText;
-                        foundItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        foundItem.style.border = "3px solid #d81b60";
-                        setTimeout(() => { foundItem.style.border = "none"; }, 4000);
-                    } else {
-                        document.getElementById('result').innerText = "კოდი " + decodedText + " ვერ მოიძებნა";
-                    }
-                }
-            ).catch(err => console.error("Camera error", err));
-        });
-
-        window.onload = loadProducts;
-    </script>
-</body>
-</html>
+    <div class="footer">
+        <div class="footer-logo">TUSKI COSMETICS</div>
+        <div class="contact-info">📍 მისამართი: მარნეული, რუსთაველი 41</div>
+        <div class="contact-info">📞 ტელეფონი: <a href="tel:+995571244884" style="color: inherit; text-decoration: none;">571 24 48 84</a></div>
+        
+        <div style="margin-top: 20px;">
+            <a href="https://maps.google.com/?q=Marneuli,Rustaveli+41" target="_blank" class="map-btn">
+                🚗 მარშრუტის ჩვენება (Get Directions)
+            </a>
+        </div>
+        <p style="font-size: 11px; color: #bbb; margin-top: 30px;">©
