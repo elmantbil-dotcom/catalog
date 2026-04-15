@@ -14,7 +14,11 @@
         .logo-text { font-size: 26px; font-weight: bold; letter-spacing: 3px; color: #000; margin-bottom: 5px; }
         .sub-logo { font-size: 12px; color: #888; letter-spacing: 1px; margin-bottom: 15px; }
         
-        #reader { width: 100%; max-width: 300px; margin: 0 auto; border-radius: 15px; overflow: hidden; background: #000; }
+        /* Стили сканера */
+        #reader-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; padding-top: 50px; }
+        #reader { width: 90%; max-width: 400px; margin: 0 auto; border-radius: 15px; overflow: hidden; border: 2px solid #fff; }
+        .close-scanner { background: #d81b60; color: white; border: none; padding: 10px 20px; border-radius: 20px; margin-top: 20px; cursor: pointer; font-weight: bold; }
+
         .scanner-section { padding: 10px; margin-bottom: 10px; }
         #result { font-size: 14px; margin-top: 10px; font-weight: bold; color: #d81b60; }
         .scan-btn { padding: 12px 25px; background: #000; color: #fff; border: none; border-radius: 25px; cursor: pointer; font-size: 14px; }
@@ -24,68 +28,46 @@
         .filter-btn.active { background: #000; color: #fff; border-color: #000; }
 
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .product-card { background: #fff; border-radius: 15px; padding: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); text-align: left; }
+        .product-card img { width: 100%; height: 280px; object-fit: contain; border-radius: 10px; margin-bottom: 12px; background: #fafafa; cursor: zoom-in; transition: 0.3s; }
+        .product-card img:hover { opacity: 0.8; }
         
-        .product-card { background: #fff; border-radius: 15px; padding: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); text-align: left; transition: 0.3s; }
-        .product-card img { width: 100%; height: 280px; object-fit: contain; border-radius: 10px; margin-bottom: 12px; background: #fafafa; cursor: zoom-in; }
         .p-name { font-weight: bold; font-size: 18px; margin-bottom: 8px; color: #222; }
         .p-price { color: #d81b60; font-weight: bold; font-size: 22px; margin-bottom: 10px; }
         .pro-label { background: #000; color: #fff; font-size: 11px; padding: 4px 10px; border-radius: 5px; display: inline-block; margin-bottom: 12px; font-weight: bold; }
 
-        .p-description { font-size: 13px; color: #555; line-height: 1.6; border-top: 1px solid #eee; margin-top: 12px; padding-top: 12px; }
-        .p-description p { margin: 6px 0; }
-        .lang-tag { color: #333; background: #f0f0f0; padding: 2px 5px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-right: 6px; text-transform: uppercase; }
+        /* Lightbox Модальное окно */
+        .modal { display: none; position: fixed; z-index: 3000; padding-top: 50px; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); cursor: pointer; }
+        .modal-content { margin: auto; display: block; max-width: 90%; max-height: 85%; border-radius: 10px; }
 
-        /* --- ახალი სტილები სურათის გასადიდებლად (Lightbox) --- */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1001;
-            padding-top: 50px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            cursor: pointer;
-        }
-        .modal-content {
-            margin: auto;
-            display: block;
-            max-width: 90%;
-            max-height: 80%;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.2);
-        }
-        .modal-caption {
-            color: #ccc;
-            text-align: center;
-            padding: 15px;
-            font-size: 14px;
-        }
-
-        .footer { background: #fff; padding: 40px 20px; margin-top: 50px; border-top: 1px solid #ddd; text-align: center; }
-        .footer-logo { font-weight: bold; font-size: 20px; margin-bottom: 15px; }
-        .contact-info { color: #555; font-size: 15px; margin: 8px 0; }
-        .map-btn { display: inline-block; margin-top: 15px; color: #d81b60; text-decoration: none; font-weight: bold; border: 2px solid #d81b60; padding: 10px 20px; border-radius: 25px; transition: 0.3s; }
-        .map-btn:hover { background: #d81b60; color: #fff; }
+        .footer { background: #fff; padding: 40px 20px; margin-top: 50px; border-top: 1px solid #ddd; }
+        .map-btn { display: inline-block; margin-top: 15px; color: #d81b60; text-decoration: none; font-weight: bold; border: 2px solid #d81b60; padding: 10px 20px; border-radius: 25px; }
 
         @media (max-width: 600px) { .product-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
+    <div id="reader-container">
+        <div id="reader"></div>
+        <button class="close-scanner" onclick="stopScanner()">დახურვა (Close)</button>
+    </div>
+
+    <div id="imgModal" class="modal" onclick="this.style.display='none'">
+        <img class="modal-content" id="fullImg">
+    </div>
+
     <div class="header">
         <div class="logo-text">TUSKI COSMETICS</div>
         <div class="sub-logo">MARNEULI SMART CATALOG</div>
         
         <div class="scanner-section">
-            <div id="reader"></div>
             <p id="result">Scanner Ready</p>
-            <button id="start-scan" class="scan-btn">ჩართე სკანერი (Start Scan)</button>
+            <button id="start-scan" class="scan-btn" onclick="startScanner()">ჩართე სკანერი (Start Scan)</button>
         </div>
 
         <div class="category-menu" id="category-menu">
-            <button class="filter-btn active" data-filter="all">ყველა (All)</button>
+            <button class="filter-btn active" data-filter="all" onclick="filterProducts('all')">ყველა (All)</button>
         </div>
     </div>
 
@@ -96,11 +78,83 @@
     <div class="footer">
         <div class="footer-logo">TUSKI COSMETICS</div>
         <div class="contact-info">📍 მისამართი: მარნეული, რუსთაველი 41</div>
-        <div class="contact-info">📞 ტელეფონი: <a href="tel:+995571244884" style="color: inherit; text-decoration: none;">571 24 48 84</a></div>
-        
-        <div style="margin-top: 20px;">
-            <a href="https://maps.google.com/?q=Marneuli,Rustaveli+41" target="_blank" class="map-btn">
-                🚗 მარშრუტის ჩვენება (Get Directions)
-            </a>
-        </div>
-        <p style="font-size: 11px; color: #bbb; margin-top: 30px;">©
+        <div class="contact-info">📞 ტელეფონი: <a href="tel:+995571244884" style="text-decoration: none; color: inherit;">571 24 48 84</a></div>
+        <a href="https://www.google.com/maps?q=41.3276,44.8115" target="_blank" class="map-btn">🚗 მარშრუტის ჩვენება (Get Directions)</a>
+        <p style="font-size: 11px; color: #bbb; margin-top: 30px;">© 2026 TUSKI COSMETICS. All rights reserved.</p>
+    </div>
+
+    <script>
+        let allProducts = [];
+        const html5QrCode = new Html5Qrcode("reader");
+
+        // Функция открытия фото
+        function openImage(src) {
+            document.getElementById('imgModal').style.display = "flex";
+            document.getElementById('fullImg').src = src;
+        }
+
+        // СКАНЕР: Старт
+        function startScanner() {
+            document.getElementById('reader-container').style.display = 'block';
+            html5QrCode.start(
+                { facingMode: "environment" }, 
+                { fps: 10, qrbox: 250 },
+                (decodedText) => {
+                    document.getElementById('result').innerText = "Найдено: " + decodedText;
+                    stopScanner(); // Автоматически закрываем после сканирования
+                    searchProduct(decodedText);
+                }
+            ).catch(err => alert("Ошибка камеры: " + err));
+        }
+
+        // СКАНЕР: Стоп
+        function stopScanner() {
+            html5QrCode.stop().then(() => {
+                document.getElementById('reader-container').style.display = 'none';
+            });
+        }
+
+        // Загрузка данных (замени ссылку на свою, если она другая)
+        async function loadProducts() {
+            const sheetId = 'ВАШ_ID_ТАБЛИЦЫ_ТУТ'; // Или прямая ссылка на Excel
+            try {
+                // Имитация загрузки (замени на свой fetch)
+                // Пример: const response = await fetch(url);
+                
+                // Временные данные для теста, пока ты не вставил свою ссылку:
+                allProducts = [
+                    { name: "BiG Professional Gel", price: "7 GEL", cat: "პარფიუმერია", img: "https://via.placeholder.com/280" },
+                    { name: "BIG Cotton Swabs", price: "4 GEL", cat: "სალონი (Pro)", img: "https://via.placeholder.com/280" }
+                ];
+                renderProducts(allProducts);
+            } catch (e) {
+                document.getElementById('product-grid').innerHTML = "<p>Ошибка загрузки данных.</p>";
+            }
+        }
+
+        function renderProducts(products) {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = products.map(p => `
+                <div class="product-card">
+                    <img src="${p.img}" onclick="openImage(this.src)">
+                    <div class="pro-label">${p.cat}</div>
+                    <div class="p-name">${p.name}</div>
+                    <div class="p-price">${p.price}</div>
+                </div>
+            `).join('');
+        }
+
+        function filterProducts(cat) {
+            const filtered = cat === 'all' ? allProducts : allProducts.filter(p => p.cat === cat);
+            renderProducts(filtered);
+        }
+
+        function searchProduct(code) {
+            const found = allProducts.filter(p => p.name.toLowerCase().includes(code.toLowerCase()));
+            if(found.length > 0) renderProducts(found);
+        }
+
+        window.onload = loadProducts;
+    </script>
+</body>
+</html>
