@@ -40,12 +40,15 @@
 </head>
 <body>
 
-   <div class="category-menu" id="category-menu">
-     <button class="filter-btn active" data-filter="all">ყველა (All)</button>
-     <button class="filter-btn" data-filter="perfume">პარფიუმერია (Perfume)</button>
-     <button class="filter-btn" data-filter="lipstick">ტუჩსაცხი (Lipstick)</button>
-     <button class="filter-btn" data-filter="salon">სალონი (Salon)</button>
- </div>
+    <div class="header">
+        <div class="logo-text">TUSKI COSMETICS</div>
+        <button id="start-scan-btn" style="padding: 12px 25px; background: #000; color: #fff; border: none; border-radius: 25px; cursor: pointer; font-weight: bold;">ჩართე სკანერი (Start Scan)</button>
+
+        <div class="category-menu" id="category-menu">
+            <button class="filter-btn active" data-filter="all">ყველა (All)</button>
+        </div>
+    </div>
+
     <div id="scanner-wrap" class="scanner-container">
         <button id="close-scanner" onclick="stopScanner()">✕</button>
         <div id="reader"></div>
