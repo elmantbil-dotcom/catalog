@@ -86,7 +86,7 @@
             }
         }
 
-       function renderProducts(products) {
+        function renderProducts(products) {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
 
@@ -96,12 +96,7 @@
                 card.className = `product-card ${p.Category}`;
                 card.id = `item-${p.Barcode}`;
 
-                // Формируем ссылку для WhatsApp
-                const whatsappNumber = "995571244884";
-                const orderText = encodeURIComponent(`გამარჯობა, მინდა შევიძინო: ${p.Title || 'დასახელების გარეშე'}`);
-                const whatsappLink = `https://wa.me/${whatsappNumber}?text=${orderText}`;
-
-           card.innerHTML = `
+                card.innerHTML = `
                     <img src="${p.Barcode}.jpg" onerror="this.src='placeholder.jpg'" onclick="openPhoto('${p.Barcode}.jpg')">
                     <div class="p-name">${p.Title || 'Без названия'}</div>
                     <div class="p-price">${p.Price || '0'} GEL</div>
@@ -116,9 +111,6 @@
             });
         }
 
-                grid.appendChild(card);
-            });
-        }
         // Увеличение фото
         function openPhoto(src) {
             const modal = document.getElementById('imgModal');
