@@ -101,22 +101,17 @@
                 const orderText = encodeURIComponent(`გამარჯობა, მინდა შევიძინო: ${p.Title || 'დასახელების გარეშე'}`);
                 const whatsappLink = `https://wa.me/${whatsappNumber}?text=${orderText}`;
 
-                card.innerHTML = `
-                    <img src="${p.Barcode}.jpg" onerror="this.src='placeholder.jpg'" onclick="openPhoto('${p.Barcode}.jpg')">
-                    <div class="p-name">${p.Title || 'Без названия'}</div>
-                    <div class="p-price">${p.Price || '0'} GEL</div>
-                    ${isPro ? '<div class="pro-label">მხოლოდ სალონებისთვის (Pro Only)</div>' : ''}
-                    
-                    <a href="${whatsappLink}" target="_blank" style="display: block; text-align: center; background: #25D366; color: white; text-decoration: none; padding: 10px; border-radius: 10px; font-weight: bold; margin-bottom: 15px;">
-                        🛒 შეკვეთა (WhatsApp)
-                    </a>
-
-                    <div class="p-description">
-                        <p><strong>GE:</strong> ${p.Description_GE || ''}</p>
-                        <p><strong>AZ:</strong> ${p.Description_AZ || ''}</p>
-                        <p><strong>RU:</strong> ${p.Description_RU || ''}</p>
-                    </div>
-                `;
+               card.innerHTML = `
+    <div style="margin-top: 15px;">
+        <a href="${whatsappLink}" target="_blank" 
+           style="display: inline-flex; align-items: center; justify-content: center; 
+                  background-color: #25D366; color: white; text-decoration: none; 
+                  padding: 8px 15px; border-radius: 20px; font-size: 14px; 
+                  font-weight: bold; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <span style="margin-right: 8px;">🛒</span> შეკვეთა
+        </a>
+    </div>
+`;
                 grid.appendChild(card);
             });
         }
